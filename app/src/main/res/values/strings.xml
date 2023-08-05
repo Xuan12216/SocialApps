@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SocialConnect</string>
+    <string name="screen1">SocialConnect</string>
+    <string name="screen2">創建你的社交圈</string>
+    <string name="screen3">共享瞬間</string>
+
+    <string name="screen1desc">歡迎來到我們的社交平台！透過我們，你可以輕鬆地連結世界，尋找志同道合的朋友，一同分享彼此的心情和經歷。</string>
+    <string name="screen2desc">屬於你的個人社交圈！在這裡，你可以邀請親朋好友，並認識新的夥伴，一起探索生活的各種可能性。</string>
+    <string name="screen3desc">帶你共享瞬間！無論身處何方，與摯愛們聚在一起。珍藏重要時刻，感受與親人共度的溫馨時光。</string>
+    <string name="startDesc">Start Desc.</string>
+</resources>
