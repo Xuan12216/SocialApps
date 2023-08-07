@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.socialapps.LoginAndRegister.LoginRegisterActivity;
 import com.example.socialapps.MainActivity;
 import com.example.socialapps.R;
 
@@ -67,7 +68,7 @@ public class NavigationActivity extends AppCompatActivity {
         //如果isMainPageSet true的話，直接進入MainActivity
         if (isMainPageSet) {
             // 如果 MainActivity 被設置為主頁，直接跳轉到 MainActivity
-            startActivity(new Intent(NavigationActivity.this, MainActivity.class));
+            startActivity(new Intent(NavigationActivity.this, LoginRegisterActivity.class));
             finish(); // 結束 MainActivity，避免返回到它
         }
 
@@ -104,7 +105,7 @@ public class NavigationActivity extends AppCompatActivity {
                     slideViewPager.setCurrentItem(getItem(1), true);
                 else {
                     //跳轉頁面去MainActivity
-                    startActivity(new Intent(NavigationActivity.this,MainActivity.class));
+                    startActivity(new Intent(NavigationActivity.this, LoginRegisterActivity.class));
                     finish();
 
                     // 使用 SharedPreferences 將 MainActivity 設置為主頁，下一次進入App時不會再進來這個Activity
@@ -121,7 +122,7 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //跳轉頁面去MainActivity
-                startActivity(new Intent(NavigationActivity.this,MainActivity.class));
+                startActivity(new Intent(NavigationActivity.this,LoginRegisterActivity.class));
                 finish();
 
                 // 使用 SharedPreferences 將 MainActivity 設置為主頁，下一次進入App時不會再進來這個Activity
