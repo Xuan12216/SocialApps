@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.socialapps.MainActivity;
@@ -46,6 +47,7 @@ public class SignupTabFragment extends Fragment {
     private TextInputLayout layoutPassword_up,layoutConfirm_up,layoutEmail_up;
     private TextInputEditText up_password,up_confirm,up_email,up_name;
     private Button up_button;
+    private ProgressBar progressBar;
     private boolean isPasswordMatch = false;
     private boolean isPasswordTrue = false;
     private boolean isEmailTrue = false;
@@ -68,6 +70,7 @@ public class SignupTabFragment extends Fragment {
         up_email = view.findViewById(R.id.signup_email);
         up_name = view.findViewById(R.id.signup_name);
         up_button = view.findViewById(R.id.signup_button);
+        progressBar = view.findViewById(R.id.progressBar_up);
         myAuth = FirebaseAuth.getInstance();
 
         //checking if user already signed in
@@ -80,6 +83,7 @@ public class SignupTabFragment extends Fragment {
         up_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 if (!up_name.getText().toString().isEmpty()){
                     isNameTrue = true;
                 }
@@ -103,23 +107,27 @@ public class SignupTabFragment extends Fragment {
                             {
                                 if (task1.isSuccessful())
                                 {
+                                    progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(),"Sign Up successfully",Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(getContext(), bottom_menu.class));
                                     getActivity().finish();
                                 }
                                 else
                                 {
+                                    progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(),"Failed Try again",Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
                         else
                         {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getContext(),"Failed email exists or format wrong",Toast.LENGTH_LONG).show();
                         }
                     });
                 }
                 else {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"Format Wrong",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -155,7 +163,7 @@ public class SignupTabFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String password = charSequence.toString();
-
+                layoutPassword_up.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.green,null)));
                 if (password.length() >= 8){
                     if (password.length()>20){
                         layoutPassword_up.setHelperText("");
@@ -174,7 +182,14 @@ public class SignupTabFragment extends Fragment {
                 }
             }
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+                if (up_confirm.toString() != up_password.toString() && isPasswordTrue && isPasswordMatch){
+                    layoutConfirm_up.setHelperText("Password did not match");
+                    layoutConfirm_up.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red,null)));
+                    layoutConfirm_up.setError("");
+                    isPasswordMatch=false;
+                }
+            }
         });
 
         up_confirm.addTextChangedListener(new TextWatcher() {
@@ -227,6 +242,7 @@ public class SignupTabFragment extends Fragment {
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
 
                 try {
+                    progressBar.setVisibility(View.VISIBLE);
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
                     auth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -239,16 +255,19 @@ public class SignupTabFragment extends Fragment {
                                 users users1 = new users(user.getUid(),user.getDisplayName(),user.getPhotoUrl().toString(),"","GoogleSignIn");
                                 database.getReference().child("users").child(user.getUid()).setValue(users1);
 
+                                progressBar.setVisibility(View.GONE);
                                 startActivity(new Intent(getContext(), bottom_menu.class));
                                 getActivity().finish();
                             }
                             else {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
                 catch (ApiException e) {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Failed or Cancelled", Toast.LENGTH_SHORT).show();
                 }
             }

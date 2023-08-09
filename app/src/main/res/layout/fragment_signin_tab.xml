@@ -7,119 +7,139 @@
     android:layout_height="match_parent"
     tools:context=".LoginAndRegister.SigninTabFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                app:startIconDrawable="@drawable/baseline_email_24"
-                app:startIconTint="@color/lavender"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/lavender"
-                android:id="@+id/layoutEmail_sign_in">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/login_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="40dp"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/lavender"
-                app:startIconDrawable="@drawable/baseline_lock_24"
-                app:startIconTint="@color/lavender">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/login_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:hint="Password"
-                    android:inputType="textPassword" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/edittext_bkg"
-                android:text="Login"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/ForgetPassword_sign_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Forget Password?"
-                android:gravity="end"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="20dp">
-                <!-- 左邊的線 -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/black" />
-                <!-- 中間的文字 -->
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    app:startIconDrawable="@drawable/baseline_email_24"
+                    app:startIconTint="@color/lavender"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/lavender"
+                    android:id="@+id/layoutEmail_sign_in">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="40dp"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/lavender"
+                    app:startIconDrawable="@drawable/baseline_lock_24"
+                    app:startIconTint="@color/lavender">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:hint="Password"
+                        android:inputType="textPassword" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/edittext_bkg"
+                    android:text="Login"
+                    android:textSize="18sp" />
+
                 <TextView
+                    android:id="@+id/ForgetPassword_sign_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forget Password?"
+                    android:gravity="end"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="20dp">
+                    <!-- 左邊的線 -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/black" />
+                    <!-- 中間的文字 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Or Sign In With"
+                        android:textSize="16sp"
+                        android:padding="8dp" />
+                    <!-- 右邊的線 -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/black" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/autoSignIn_in"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Or Sign In With"
-                    android:textSize="16sp"
-                    android:padding="8dp" />
-                <!-- 右邊的線 -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/black" />
+                    android:src="@drawable/google"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"/>
+
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/autoSignIn_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/google"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"/>
-
         </LinearLayout>
-    </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.72" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

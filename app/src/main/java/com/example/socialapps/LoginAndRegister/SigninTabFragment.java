@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class SigninTabFragment extends Fragment {
     private Button loginButton;
     private TextView forgotPassword;
     private FirebaseAuth myAuth;
+    private ProgressBar progressBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class SigninTabFragment extends Fragment {
         loginButton = view.findViewById(R.id.login_button);
         forgotPassword = view.findViewById(R.id.ForgetPassword_sign_in);
         myAuth = FirebaseAuth.getInstance();
+        progressBar = view.findViewById(R.id.progressBar_in);
 
         //checking if user already signed in
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
@@ -77,6 +80,7 @@ public class SigninTabFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 String email = loginEmail.getText().toString().trim();
                 String password = loginPassword.getText().toString().trim();
                 if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches() && !password.isEmpty())
@@ -88,12 +92,14 @@ public class SigninTabFragment extends Fragment {
                         {
                             if (task.isSuccessful())
                             {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getContext(),"Successful SignIn !",Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(getContext(), bottom_menu.class));
                                 getActivity().finish();
                             }
                             else
                             {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getContext(),"Failed to Login",Toast.LENGTH_LONG).show();
                             }
                         }
@@ -124,6 +130,7 @@ public class SigninTabFragment extends Fragment {
                 //getting signed in account after user selected an account from google account dialog
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
                 try {
+                    progressBar.setVisibility(View.VISIBLE);
                     //從 Task 中取得 Google 登入成功後的帳號資訊
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     //使用 GoogleSignInAccount 中的 ID Token 創建 Firebase 身分驗證的憑證，用於後續的 Firebase 登入驗證。
@@ -142,6 +149,7 @@ public class SigninTabFragment extends Fragment {
                                 //把資料儲存進Firebase 的RealTime Database
                                 database.getReference().child("users").child(user.getUid()).setValue(users1);
 
+                                progressBar.setVisibility(View.GONE);
                                 //startActivity到MainActivity
                                 startActivity(new Intent(getContext(), bottom_menu.class));
                                 //結束當前頁面，避免返回來造成錯誤
@@ -154,6 +162,7 @@ public class SigninTabFragment extends Fragment {
                     });
                 }
                 catch (ApiException e) {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Failed or Cancelled", Toast.LENGTH_SHORT).show();
                 }
             }
