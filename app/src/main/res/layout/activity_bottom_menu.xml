@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottomAppbar"
         android:layout_gravity="bottom"
-        app:fabCradleMargin="20dp"
-        app:fabCradleRoundedCornerRadius="50dp">
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="30dp">
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,6 +40,6 @@
         app:layout_anchor="@id/bottomAppbar"
         app:shapeAppearanceOverlay="@style/RoundedFAB"
         app:maxImageSize="40dp"
-        app:tint="@color/lavender"/>
+        app:tint="@color/lavender" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

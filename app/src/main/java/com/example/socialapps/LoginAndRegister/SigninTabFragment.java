@@ -7,35 +7,46 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.socialapps.MainActivity;
 import com.example.socialapps.R;
+import com.example.socialapps.bottomMenu.bottom_menu;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SigninTabFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
-
+    private TextInputEditText loginEmail,loginPassword;
+    private Button loginButton;
+    private TextView forgotPassword;
+    private FirebaseAuth myAuth;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,7 +55,54 @@ public class SigninTabFragment extends Fragment {
 
         //google登陸Button
         final ImageView autoSignIn_in = view.findViewById(R.id.autoSignIn_in);
+        loginEmail = view.findViewById(R.id.login_email);
+        loginPassword = view.findViewById(R.id.login_password);
+        loginButton = view.findViewById(R.id.login_button);
+        forgotPassword = view.findViewById(R.id.ForgetPassword_sign_in);
+        myAuth = FirebaseAuth.getInstance();
 
+        //checking if user already signed in
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            startActivity(new Intent(getContext(), bottom_menu.class));
+            getActivity().finish();
+        }
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),ForgetPassword_activity.class));
+            }
+        });
+        //===================================Below Email login Code=====================================
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = loginEmail.getText().toString().trim();
+                String password = loginPassword.getText().toString().trim();
+                if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches() && !password.isEmpty())
+                {
+                    myAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            if (task.isSuccessful())
+                            {
+                                Toast.makeText(getContext(),"Successful SignIn !",Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(getContext(), bottom_menu.class));
+                                getActivity().finish();
+                            }
+                            else
+                            {
+                                Toast.makeText(getContext(),"Failed to Login",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        //===================================Above Email login Code=====================================
+        //===================================Below Google Login And Firebase Code=====================================
         //Firebase Authentication 和 Firebase Realtime Database 功能的初始化設定。
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -58,12 +116,6 @@ public class SigninTabFragment extends Fragment {
         //用來建立一個 GoogleSignInClient 物件，該物件允許你在你的應用程式中實現 Google 登入功能。
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getContext(),googleSignInOptions);
 
-        //checking if user already signed in
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            startActivity(new Intent(getContext(), MainActivity.class));
-            getActivity().finish();
-        }
-
         //使用 AndroidX Activity Result API 建立一個 ActivityResultLauncher 物件，用於處理 Google 登入的結果
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -71,7 +123,39 @@ public class SigninTabFragment extends Fragment {
 
                 //getting signed in account after user selected an account from google account dialog
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                handleSignInTask(task);
+                try {
+                    //從 Task 中取得 Google 登入成功後的帳號資訊
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    //使用 GoogleSignInAccount 中的 ID Token 創建 Firebase 身分驗證的憑證，用於後續的 Firebase 登入驗證。
+                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
+                    //使用 Firebase 憑證進行身分驗證後的成功處理程式碼區塊
+                    auth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            if (task.isSuccessful()){
+                                //獲取當前已登入的 Firebase 使用者物件
+                                FirebaseUser user = auth.getCurrentUser();
+                                //確保user不為空，如果user為空，則會觸發斷言失敗，並可能引發異常
+                                assert user != null;
+                                //user不為空就執行以下程式，把Name，UID，ProfilePic和Email儲存進user1的物件中
+                                users users1 = new users(user.getUid(),user.getDisplayName(),user.getPhotoUrl().toString(),"",user.getEmail());
+                                //把資料儲存進Firebase 的RealTime Database
+                                database.getReference().child("users").child(user.getUid()).setValue(users1);
+
+                                //startActivity到MainActivity
+                                startActivity(new Intent(getContext(), bottom_menu.class));
+                                //結束當前頁面，避免返回來造成錯誤
+                                getActivity().finish();
+                            }
+                            else {
+                                Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+                catch (ApiException e) {
+                    Toast.makeText(getContext(), "Failed or Cancelled", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -83,46 +167,7 @@ public class SigninTabFragment extends Fragment {
             }
         });
 
+        //===================================Below Google Login And Firebase Code=====================================
         return view;
-    }
-
-    private void handleSignInTask(Task<GoogleSignInAccount> task) {
-        try {
-            //從 Task 中取得 Google 登入成功後的帳號資訊
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            //使用 GoogleSignInAccount 中的 ID Token 創建 Firebase 身分驗證的憑證，用於後續的 Firebase 登入驗證。
-            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
-            //使用 Firebase 憑證進行身分驗證後的成功處理程式碼區塊
-            auth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    if (task.isSuccessful()){
-                        //獲取當前已登入的 Firebase 使用者物件
-                        FirebaseUser user = auth.getCurrentUser();
-                        users users1 = new users();
-                        //確保user不為空，如果user為空，則會觸發斷言失敗，並可能引發異常
-                        assert user != null;
-                        //user不為空就執行以下程式，把Name，UID，ProfilePic和Email儲存進user1的物件中
-                        users1.setUserName(user.getDisplayName());
-                        users1.setUserId(user.getUid());
-                        users1.setProfilePic(user.getPhotoUrl().toString());
-                        users1.setUserEmail(user.getEmail());
-                        //把資料儲存進Firebase 的RealTime Database
-                        database.getReference().child("users").child(user.getUid()).setValue(users1);
-
-                        //startActivity到MainActivity
-                        startActivity(new Intent(getContext(), MainActivity.class));
-                        //結束當前頁面，避免返回來造成錯誤
-                        getActivity().finish();
-                    }
-                    else {
-                        Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-        catch (ApiException e) {
-            Toast.makeText(getContext(), "Failed or Cancelled", Toast.LENGTH_SHORT).show();
-        }
     }
 }

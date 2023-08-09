@@ -1,13 +1,22 @@
 package com.example.socialapps.LoginAndRegister;
 
 public class users {
-    String UserId,UserName,ProfilePic,UserEmail;
+    String UserId,UserName,ProfilePic,ProfilePic1,UserEmail;
 
-    public users(String userId, String userName, String profilePic, String userEmail) {
+    public users(String userId, String userName, String profilePic, String profilePic1,String userEmail) {
         UserId = userId;
         UserName = userName;
         ProfilePic = profilePic;
+        ProfilePic1 = profilePic1;
         UserEmail = userEmail;
+    }
+
+    public String getProfilePic1() {
+        return ProfilePic1;
+    }
+
+    public void setProfilePic1(String profilePic1) {
+        ProfilePic1 = profilePic1;
     }
 
     public String getUserEmail() {
