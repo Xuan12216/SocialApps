@@ -236,7 +236,7 @@ public class SignupTabFragment extends Fragment {
                                 FirebaseUser user = auth.getCurrentUser();
                                 assert user != null;
                                 //user不為空就執行以下程式，把Name，UID，ProfilePic和Email儲存進user1的物件中
-                                users users1 = new users(user.getUid(),user.getDisplayName(),user.getPhotoUrl().toString(),"",user.getEmail());
+                                users users1 = new users(user.getUid(),user.getDisplayName(),user.getPhotoUrl().toString(),"","GoogleSignIn");
                                 database.getReference().child("users").child(user.getUid()).setValue(users1);
 
                                 startActivity(new Intent(getContext(), bottom_menu.class));

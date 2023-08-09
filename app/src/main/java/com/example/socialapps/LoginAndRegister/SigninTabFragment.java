@@ -138,7 +138,7 @@ public class SigninTabFragment extends Fragment {
                                 //確保user不為空，如果user為空，則會觸發斷言失敗，並可能引發異常
                                 assert user != null;
                                 //user不為空就執行以下程式，把Name，UID，ProfilePic和Email儲存進user1的物件中
-                                users users1 = new users(user.getUid(),user.getDisplayName(),user.getPhotoUrl().toString(),"",user.getEmail());
+                                users users1 = new users(user.getUid(),user.getDisplayName(),user.getPhotoUrl().toString(),"","GoogleSignIn");
                                 //把資料儲存進Firebase 的RealTime Database
                                 database.getReference().child("users").child(user.getUid()).setValue(users1);
 
