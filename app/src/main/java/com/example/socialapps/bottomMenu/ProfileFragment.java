@@ -41,7 +41,7 @@ public class ProfileFragment extends Fragment {
 
         final TextView email = view.findViewById(R.id.emailPro);
         final TextView name = view.findViewById(R.id.namePro);
-        final Button button = view.findViewById(R.id.logoutPro);
+        final Button button = view.findViewById(R.id.logoutPro),settingbutton=view.findViewById(R.id.settingButton);
         final ImageView imageView = view.findViewById(R.id.imageMainPro);
 
         //取得目前的Firebase帳號
@@ -84,7 +84,13 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        //打開編輯設定
+        settingbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         return view;
     }
 }

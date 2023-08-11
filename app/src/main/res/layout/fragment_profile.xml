@@ -15,14 +15,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/profilebackgroud"
             android:background="@color/white"
+            android:layout_margin="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:orientation="horizontal"
@@ -32,13 +34,17 @@
                     android:id="@+id/imageMainPro"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_margin="10dp" />
+                    android:layout_margin="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toEndOf="@+id/imageMainPro"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/namePro"
@@ -63,7 +69,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/logoutPro"
@@ -75,6 +81,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/settingButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginEnd="-15dp"
+            android:background="@drawable/circle_button_shape"
+            android:src="@drawable/ic_baseline_dehaze_24"
+            app:layout_constraintEnd_toEndOf="@+id/profilebackgroud"
+            app:layout_constraintTop_toTopOf="@+id/profilebackgroud" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
