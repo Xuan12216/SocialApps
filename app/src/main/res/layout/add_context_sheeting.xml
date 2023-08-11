@@ -90,28 +90,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/addLocationLayout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_location_24"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add location"
-            android:textColor="@color/lavender"
-            android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
-
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/postLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -119,9 +97,11 @@
         android:padding="10dp"
         android:gravity="end">
 
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/postButton"
+            android:background=""
             android:text="Post"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
