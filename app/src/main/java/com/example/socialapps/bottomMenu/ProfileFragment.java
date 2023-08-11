@@ -1,16 +1,24 @@
 package com.example.socialapps.bottomMenu;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +49,8 @@ public class ProfileFragment extends Fragment {
 
         final TextView email = view.findViewById(R.id.emailPro);
         final TextView name = view.findViewById(R.id.namePro);
-        final Button button = view.findViewById(R.id.logoutPro),settingbutton=view.findViewById(R.id.settingButton);
+        final Button button = view.findViewById(R.id.logoutPro);
+        final ImageButton settingButton=view.findViewById(R.id.settingButton);
         final ImageView imageView = view.findViewById(R.id.imageMainPro);
 
         //取得目前的Firebase帳號
@@ -85,12 +94,65 @@ public class ProfileFragment extends Fragment {
             }
         });
         //打開編輯設定
-        settingbutton.setOnClickListener(new View.OnClickListener() {
+        settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showBottomDialog();
             }
         });
         return view;
+    }
+
+    private void showBottomDialog() {
+
+        final Dialog dialog;
+        Context context = getContext();
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.profile_setting_sheet);
+
+        LinearLayout cUsername = dialog.findViewById(R.id.renameLayout);
+        LinearLayout cPicture = dialog.findViewById(R.id.changePicture);
+        LinearLayout cContent = dialog.findViewById(R.id.changeContentLayout);
+        LinearLayout logoutLayout = dialog.findViewById(R.id.logout);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        cUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+       cPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        cContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        logoutLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 }
