@@ -101,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/postButton"
-            android:background=""
+            android:backgroundTint="@color/white"
             android:text="Post"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"

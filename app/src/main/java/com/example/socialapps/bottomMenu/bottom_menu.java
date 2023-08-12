@@ -57,7 +57,6 @@ public class bottom_menu extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new AddFragment());
                 showBottomDialog();
             }
         });

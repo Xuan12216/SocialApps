@@ -26,7 +26,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -36,7 +36,7 @@
                     android:layout_height="100dp"
                     android:layout_margin="10dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -51,34 +51,54 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name"
-                        android:textSize="20sp" />
+                        android:textSize="25sp"
+                        android:layout_marginTop="30dp"/>
 
                     <TextView
                         android:id="@+id/emailPro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Email"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/followerPro"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="粉絲"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/logoutPro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Log Out"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/followerPro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="follower"
+                    android:textSize="16sp"
+                    android:layout_margin="10dp"/>
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="nothing to say\n1-----------.\n2.----------"
+                    android:textSize="16sp"
+                    android:layout_margin="10dp"/>
+                <TextView
+                    android:id="@+id/myPostText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Post"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_round_remove_24"/>
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></ListView>
+            </LinearLayout>
 
         </LinearLayout>
 

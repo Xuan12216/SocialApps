@@ -49,7 +49,6 @@ public class ProfileFragment extends Fragment {
 
         final TextView email = view.findViewById(R.id.emailPro);
         final TextView name = view.findViewById(R.id.namePro);
-        final Button button = view.findViewById(R.id.logoutPro);
         final ImageButton settingButton=view.findViewById(R.id.settingButton);
         final ImageView imageView = view.findViewById(R.id.imageMainPro);
 
@@ -78,21 +77,6 @@ public class ProfileFragment extends Fragment {
             });
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Firebase sign out
-                FirebaseAuth.getInstance().signOut();
-                //Google
-                //讀取目前登陸的google帳號
-                GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getContext(),googleSignInOptions);
-                googleSignInClient.signOut();
-                Toast.makeText(getContext(), "Successfully logged out", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(), LoginRegisterActivity.class));
-                getActivity().finish();
-            }
-        });
         //打開編輯設定
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +124,16 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                //Firebase sign out
+                FirebaseAuth.getInstance().signOut();
+                //Google
+                //讀取目前登陸的google帳號
+                GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getContext(),googleSignInOptions);
+                googleSignInClient.signOut();
+                Toast.makeText(getContext(), "Successfully logged out", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), LoginRegisterActivity.class));
+                getActivity().finish();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
