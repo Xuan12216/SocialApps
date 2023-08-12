@@ -169,10 +169,23 @@ public class SignupTabFragment extends Fragment {
                         layoutPassword_up.setHelperText("");
                         layoutPassword_up.setError("Maximum 20 char");
                         isPasswordTrue=false;
-                    }else {
+                    }
+                    else {
                         layoutPassword_up.setHelperText("Strong Password");
                         layoutPassword_up.setError("");
                         isPasswordTrue=true;
+                        if (!up_confirm.getText().toString().isEmpty() && up_confirm.getText().toString().matches(password)){
+                            layoutConfirm_up.setHelperText("Password Match");
+                            layoutConfirm_up.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.green,null)));
+                            layoutConfirm_up.setError("");
+                            isPasswordMatch=true;
+                        }
+                        else {
+                            layoutConfirm_up.setHelperText("Password did not match");
+                            layoutConfirm_up.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red,null)));
+                            layoutConfirm_up.setError("");
+                            isPasswordMatch=false;
+                        }
                     }
                 }
                 else {
@@ -182,14 +195,7 @@ public class SignupTabFragment extends Fragment {
                 }
             }
             @Override
-            public void afterTextChanged(Editable editable) {
-                if (up_confirm.toString() != up_password.toString() && isPasswordTrue && isPasswordMatch){
-                    layoutConfirm_up.setHelperText("Password did not match");
-                    layoutConfirm_up.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red,null)));
-                    layoutConfirm_up.setError("");
-                    isPasswordMatch=false;
-                }
-            }
+            public void afterTextChanged(Editable editable) {}
         });
 
         up_confirm.addTextChangedListener(new TextWatcher() {

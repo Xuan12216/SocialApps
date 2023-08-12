@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -22,10 +23,20 @@ import com.example.socialapps.R;
 import com.example.socialapps.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class bottom_menu extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     FloatingActionButton floatingActionButton;
+    private boolean isCamera = false;
+    private boolean isPicture = false;
+    private FirebaseUser user;
+    private FirebaseDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +84,32 @@ public class bottom_menu extends AppCompatActivity {
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.add_context_sheeting);
+
+        TextInputEditText add_edittext = dialog.findViewById(R.id.add_edittext);
+        LinearLayout cameraLayout = dialog.findViewById(R.id.cameraLayout);
+        LinearLayout AddPictureLayout = dialog.findViewById(R.id.AddPictureLayout);
+        Button postButton = dialog.findViewById(R.id.postButton);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (add_edittext.getText().toString().isEmpty() && !isCamera && !isPicture){
+                    Toast.makeText(getApplicationContext(),"No data to post",Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                }
+            }
+        });
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);

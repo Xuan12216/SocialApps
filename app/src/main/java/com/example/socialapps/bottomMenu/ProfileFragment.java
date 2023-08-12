@@ -65,8 +65,8 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     users userDetail = snapshot.getValue(users.class);
-                    email.setText("email: "+userDetail.getUserEmail());
-                    name.setText("name: "+userDetail.getUserName());
+                    email.setText("Email: "+userDetail.getUserEmail());
+                    name.setText("Name: "+userDetail.getUserName());
                     Picasso.get().load(userDetail.getProfilePic()).into(imageView);
                 }
 
