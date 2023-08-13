@@ -239,7 +239,7 @@ public class bottom_menu extends AppCompatActivity {
 
             // Create and configure the close button
             ImageButton closeButton = new ImageButton(getApplicationContext());
-            closeButton.setImageResource(R.drawable.ic_close); // Set your close icon drawable
+            closeButton.setImageResource(R.drawable.ic_baseline_clear_24); // Set your close icon drawable
             LinearLayout.LayoutParams closeButtonLayoutParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
