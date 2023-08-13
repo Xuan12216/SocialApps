@@ -187,6 +187,12 @@ public class bottom_menu extends AppCompatActivity {
             if (data != null) {
                 ClipData clipData = data.getClipData();
                 if (clipData != null) {
+
+                    if (clipData.getItemCount() > 5) {
+                        Toast.makeText(getApplicationContext(), "You can select up to 5 images.", Toast.LENGTH_SHORT).show();
+                        return; // Don't proceed with uploading
+                    }
+
                     for (int i = 0; i < clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();
                         selectedImageUris.add(imageUri);
