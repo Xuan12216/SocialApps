@@ -1,14 +1,19 @@
 package com.example.socialapps.bottomMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -23,11 +28,19 @@ import com.example.socialapps.R;
 import com.example.socialapps.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class bottom_menu extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -36,6 +49,10 @@ public class bottom_menu extends AppCompatActivity {
     private boolean isPicture = false;
     private FirebaseUser user;
     private FirebaseDatabase database;
+    private static final int PICK_IMAGES_REQUEST = 2;
+    private List<Uri> selectedImageUris = new ArrayList<>();
+    LinearLayout imageContainer ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +96,35 @@ public class bottom_menu extends AppCompatActivity {
         fragmentTransaction.commit();
     }
     private void showBottomDialog() {
-
+        selectedImageUris.clear();
         final Dialog dialog;
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.add_context_sheeting);
 
         TextInputEditText add_edittext = dialog.findViewById(R.id.add_edittext);
-        LinearLayout cameraLayout = dialog.findViewById(R.id.cameraLayout);
+        LinearLayout videoLayout = dialog.findViewById(R.id.videoLayout);
         LinearLayout AddPictureLayout = dialog.findViewById(R.id.AddPictureLayout);
+        imageContainer = dialog.findViewById(R.id.imageContainer);
         Button postButton = dialog.findViewById(R.id.postButton);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
+
+        AddPictureLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedImageUris.size() >= 5) {
+                    Toast.makeText(getApplicationContext(), "You can select up to 5 images.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Open image picker and handle selected images
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    startActivityForResult(intent, PICK_IMAGES_REQUEST);
+                }
+            }
+        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +139,36 @@ public class bottom_menu extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"No data to post",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    DatabaseReference postsRef = database.getReference("posts"); // Change this to the appropriate reference
+                    DatabaseReference newPostRef = postsRef.push(); // Create a new unique key,生成新帖子的唯一key，每個可以都不會重複。
 
+                    newPostRef.child("text").setValue(add_edittext.getText().toString()); // Add the text data to Firebase
+                    newPostRef.child("userId").setValue(user.getUid()); // Add the user ID to the specific post
+
+                    // Upload selected images to Firebase Storage
+                    for (Uri imageUri : selectedImageUris) {
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        StorageReference imageRef = storageReference.child("images/" + newPostRef.getKey() + "/" + System.currentTimeMillis() + ".jpg");
+
+                        imageRef.putFile(imageUri)
+                                .addOnSuccessListener(taskSnapshot -> {
+                                    // Get the download URL of the uploaded image
+                                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        // Save the image URL to the post in the database
+                                        DatabaseReference postImageRef = database.getReference("posts").child(newPostRef.getKey()).child("images");
+                                        postImageRef.push().setValue(uri.toString());
+                                    });
+                                })
+                                .addOnFailureListener(exception -> {
+                                    // Handle the failure
+                                    Toast.makeText(getApplicationContext(),"Image upload failed",Toast.LENGTH_LONG).show();
+                                });
+                    }
+
+                    selectedImageUris.clear();
+
+                    Toast.makeText(getApplicationContext(),"Data posted successfully",Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
                 }
             }
         });
@@ -116,5 +178,48 @@ public class bottom_menu extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGES_REQUEST && resultCode == RESULT_OK) {
+            if (data != null) {
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        Uri imageUri = clipData.getItemAt(i).getUri();
+                        selectedImageUris.add(imageUri);
+                    }
+                } else {
+                    Uri imageUri = data.getData();
+                    selectedImageUris.add(imageUri);
+                }
+
+                updateImageContainer(); // Update the image container with selected images
+            }
+        }
+    }
+
+    private void updateImageContainer() {
+        imageContainer.removeAllViews();
+
+        for (Uri imageUri : selectedImageUris) {
+            ShapeableImageView imageView = new ShapeableImageView(getApplicationContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600, 800);
+            layoutParams.setMargins(15, 0, 15, 0); // 设置左、上、右、下间距
+            imageView.setLayoutParams(layoutParams);
+            imageView.setAdjustViewBounds(true);
+            imageView.setImageURI(imageUri);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            ShapeAppearanceModel shapeAppearanceModel = imageView.getShapeAppearanceModel()
+                    .toBuilder()
+                    .setAllCorners(CornerFamily.ROUNDED, getResources().getDimension(R.dimen.cornerSize)) // Set corner radius
+                    .build();
+            imageView.setShapeAppearanceModel(shapeAppearanceModel);
+            imageView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            imageContainer.addView(imageView);
+        }
+        isPicture=true;
     }
 }

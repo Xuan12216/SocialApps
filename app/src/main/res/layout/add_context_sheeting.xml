@@ -55,17 +55,21 @@
             android:drawablePadding="25dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageView
-        android:id="@+id/add_imageView"
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/baseline_person_24"
-        android:visibility="gone"/>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/imageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp">
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <LinearLayout
-        android:id="@+id/cameraLayout"
+        android:id="@+id/videoLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,12 +79,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_photo_camera_24"/>
+            android:src="@drawable/baseline_videocam_24" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Open Camera"
+            android:text="Add Video"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
