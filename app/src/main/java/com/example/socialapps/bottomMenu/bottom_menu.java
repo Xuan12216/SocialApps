@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -211,20 +212,59 @@ public class bottom_menu extends AppCompatActivity {
         imageContainer.removeAllViews();
 
         for (Uri imageUri : selectedImageUris) {
+            // Create a new LinearLayout to hold the ShapeableImageView and the close button
+            LinearLayout imageLayout = new LinearLayout(getApplicationContext());
+            imageLayout.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            imageLayout.setLayoutParams(imageLayoutParams);
+            imageLayout.setGravity(Gravity.CENTER); // Center the contents vertically
+
+            // Add the ShapeableImageView to the new LinearLayout
             ShapeableImageView imageView = new ShapeableImageView(getApplicationContext());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600, 800);
-            layoutParams.setMargins(15, 0, 15, 0); // 设置左、上、右、下间距
-            imageView.setLayoutParams(layoutParams);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(600, 800));
+            imageView.setPadding(15,0,15,10);
             imageView.setAdjustViewBounds(true);
             imageView.setImageURI(imageUri);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ShapeAppearanceModel shapeAppearanceModel = imageView.getShapeAppearanceModel()
                     .toBuilder()
-                    .setAllCorners(CornerFamily.ROUNDED, getResources().getDimension(R.dimen.cornerSize)) // Set corner radius
+                    .setAllCorners(CornerFamily.ROUNDED, getResources().getDimension(R.dimen.cornerSize))
                     .build();
             imageView.setShapeAppearanceModel(shapeAppearanceModel);
             imageView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-            imageContainer.addView(imageView);
+            imageLayout.addView(imageView);
+
+            // Create and configure the close button
+            ImageButton closeButton = new ImageButton(getApplicationContext());
+            closeButton.setImageResource(R.drawable.ic_close); // Set your close icon drawable
+            LinearLayout.LayoutParams closeButtonLayoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            closeButtonLayoutParams.gravity = Gravity.CENTER_HORIZONTAL; // Center the button horizontally
+            closeButton.setLayoutParams(closeButtonLayoutParams);
+
+            // Set a click listener for the close button
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Remove the corresponding LinearLayout from the imageContainer
+                    imageContainer.removeView(imageLayout);
+
+                    // Remove the corresponding imageUri from selectedImageUris list
+                    selectedImageUris.remove(imageUri);
+                }
+            });
+
+            // Add the close button to the new LinearLayout
+            imageLayout.addView(closeButton);
+
+            // Add the new LinearLayout to the imageContainer
+            imageContainer.addView(imageLayout);
+
         }
         isPicture=true;
     }
