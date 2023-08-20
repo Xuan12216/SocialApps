@@ -52,7 +52,7 @@ import java.util.List;
 public class bottom_menu extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     FloatingActionButton floatingActionButton;
-    private boolean isCamera = false;
+    private boolean isVideo = false;
     private boolean isPicture = false;
     private FirebaseUser user;
     private FirebaseDatabase database;
@@ -142,7 +142,7 @@ public class bottom_menu extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (add_edittext.getText().toString().isEmpty() && !isCamera && !isPicture){
+                if (add_edittext.getText().toString().isEmpty() && !isVideo && !isPicture){
                     Toast.makeText(getApplicationContext(),"No data to post",Toast.LENGTH_LONG).show();
                 }
                 else {
@@ -175,6 +175,7 @@ public class bottom_menu extends AppCompatActivity {
                     selectedImageUris.clear();
 
                     Toast.makeText(getApplicationContext(),"Data posted successfully",Toast.LENGTH_LONG).show();
+                    isPicture = false;
                     dialog.dismiss();
                 }
             }
@@ -204,7 +205,8 @@ public class bottom_menu extends AppCompatActivity {
                         Uri imageUri = clipData.getItemAt(i).getUri();
                         selectedImageUris.add(imageUri);
                     }
-                } else {
+                }
+                else {
                     Uri imageUri = data.getData();
                     selectedImageUris.add(imageUri);
                 }
