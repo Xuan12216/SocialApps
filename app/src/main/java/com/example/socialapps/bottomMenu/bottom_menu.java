@@ -225,83 +225,14 @@ public class bottom_menu extends AppCompatActivity {
         imageContainer.removeAllViews();
 
         for (Uri imageUri : selectedImageUris) {
-            // Create a new ConstraintLayout to hold the ShapeableImageView and the close button
-            ConstraintLayout imageLayout = new ConstraintLayout(getApplicationContext());
-            ConstraintLayout.LayoutParams imageLayoutParams = new ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-            );
-            imageLayout.setLayoutParams(imageLayoutParams);
+            // Inflate the image_layout.xml
+            View imageLayout = getLayoutInflater().inflate(R.layout.image_layout, null);
+            // Find views within the inflated layout
+            ShapeableImageView imageView = imageLayout.findViewById(R.id.imageView);
+            ShapeableImageView closeButton = imageLayout.findViewById(R.id.closeButton);
 
-            // Open an InputStream to read the image
-            InputStream inputStream = getContentResolver().openInputStream(imageUri);
-
-            // Load the image dimensions using BitmapFactory
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(inputStream, null, options);
-
-            // Close the InputStream
-            inputStream.close();
-
-            // Calculate the aspect ratio of the image
-            float imageAspectRatio = (float) options.outWidth / (float) options.outHeight;
-
-            // Define the desired dimensions for both orientations
-            int desiredWidth, desiredHeight;
-
-            if (imageAspectRatio > 1) { // Horizontal image
-                desiredWidth = 1000;
-                desiredHeight = 700;
-            } else { // Vertical image
-                desiredWidth = 500; // Set the desired width for vertical images
-                desiredHeight = 700; // Set the desired height for vertical images
-            }
-            // Add the ShapeableImageView to the new ConstraintLayout
-            ShapeableImageView imageView = new ShapeableImageView(getApplicationContext());
-            imageView.setId(View.generateViewId()); // Assign a unique ID to the ImageView
-            imageView.setLayoutParams(new ConstraintLayout.LayoutParams(desiredWidth, desiredHeight));
-            imageView.setPadding(0, 0, 30, 10);
-            imageView.setAdjustViewBounds(true);
+            // Set data and listeners for views
             imageView.setImageURI(imageUri);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ShapeAppearanceModel shapeAppearanceModel = imageView.getShapeAppearanceModel()
-                    .toBuilder()
-                    .setAllCorners(CornerFamily.ROUNDED, getResources().getDimension(R.dimen.cornerSize))
-                    .build();
-            imageView.setShapeAppearanceModel(shapeAppearanceModel);
-            imageView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-            imageLayout.addView(imageView);
-
-            // Create and configure the close button as a ShapeableImageView
-            ShapeableImageView closeButton = new ShapeableImageView(getApplicationContext());
-            closeButton.setId(View.generateViewId()); // Assign a unique ID to the ImageButton
-            closeButton.setImageResource(R.drawable.baseline_clear_24); // Set your close icon drawable
-            closeButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-            closeButton.setPadding(0, 25, 60, 0);
-            ShapeAppearanceModel closeButtonShape = closeButton.getShapeAppearanceModel()
-                    .toBuilder()
-                    .setAllCorners(CornerFamily.ROUNDED, getResources().getDimension(R.dimen.cornerSize)) // Make it circular
-                    .build();
-            closeButton.setShapeAppearanceModel(closeButtonShape);
-            ConstraintLayout.LayoutParams closeButtonLayoutParams = new ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-            );
-            closeButton.setLayoutParams(closeButtonLayoutParams);
-
-            // Add the close button to the new ConstraintLayout
-            imageLayout.addView(closeButton);
-
-            // Position the closeButton in the top-right corner of the ImageView
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(imageLayout);
-            constraintSet.connect(closeButton.getId(), ConstraintSet.TOP, imageView.getId(), ConstraintSet.TOP);
-            constraintSet.connect(closeButton.getId(), ConstraintSet.END, imageView.getId(), ConstraintSet.END);
-            constraintSet.applyTo(imageLayout);
-
-
-            // Set a click listener for the close button
             closeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -313,7 +244,7 @@ public class bottom_menu extends AppCompatActivity {
                 }
             });
 
-            // Add the new ConstraintLayout to the imageContainer
+            // Add the inflated layout to the imageContainer
             imageContainer.addView(imageLayout);
         }
         isPicture=true;
