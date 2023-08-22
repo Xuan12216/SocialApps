@@ -52,7 +52,7 @@
             android:drawableLeft="@drawable/baseline_edit_note_24"
             android:drawableTint="@color/lavender"
             android:paddingStart="10dp"
-            android:drawablePadding="25dp"/>
+            android:drawablePadding="25dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <HorizontalScrollView
@@ -68,7 +68,7 @@
     </HorizontalScrollView>
 
     <LinearLayout
-        android:id="@+id/videoLayout"
+        android:id="@+id/AddVideoLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

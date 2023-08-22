@@ -16,8 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:scaleType="centerCrop"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         app:strokeWidth="0.2dp"
         app:strokeColor="@color/lavender"
         app:shapeAppearance="@style/RoundImageView1" />
@@ -27,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="7dp"
+        android:layout_marginEnd="14dp"
         android:background="@color/white"
         android:src="@drawable/baseline_clear_24"
         app:layout_constraintEnd_toEndOf="@id/imageView"
