@@ -395,9 +395,9 @@ public class bottom_menu extends AppCompatActivity {
                                 // Define the desired dimensions for both orientations
                                 int desiredWidth, desiredHeight;
                                 // Set the desired height for vertical videos
-                                if (videoAspectRatio > 1) {desiredWidth = 850;}// Horizontal video
-                                else {desiredWidth = 500; }// Vertical video
-                                desiredHeight = 700;
+                                if (videoAspectRatio > 1) {desiredWidth = 830;}// Horizontal video
+                                else {desiredWidth = 480; }// Vertical video
+                                desiredHeight = 690;
 
                                 // Set the layout parameters for the TextureView
                                 videoView.setLayoutParams(new ConstraintLayout.LayoutParams(desiredWidth, desiredHeight));
