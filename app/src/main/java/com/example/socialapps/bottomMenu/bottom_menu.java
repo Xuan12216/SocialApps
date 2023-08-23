@@ -321,7 +321,7 @@ public class bottom_menu extends AppCompatActivity {
                 View imageLayout = getLayoutInflater().inflate(R.layout.image_layout, null);
                 // Find views within the inflated layout
                 ShapeableImageView imageView = imageLayout.findViewById(R.id.imageView);
-                ShapeableImageView closeButton = imageLayout.findViewById(R.id.closeButton);
+                ShapeableImageView closeButton = imageLayout.findViewById(R.id.homeProfilePic);
 
                 imageView.setPadding(0,0,30,10);
                 imageView.setLayoutParams(new ConstraintLayout.LayoutParams(desiredWidth,desiredHeight));
@@ -365,7 +365,7 @@ public class bottom_menu extends AppCompatActivity {
                 View videoLayout = getLayoutInflater().inflate(R.layout.video_layout, null);
                 // Find views within the inflated layout
                 TextureView videoView = videoLayout.findViewById(R.id.videoView);
-                ShapeableImageView closeButton = videoLayout.findViewById(R.id.closeButton);
+                ShapeableImageView closeButton = videoLayout.findViewById(R.id.homeProfilePic);
                 ShapeableImageView playButton = videoLayout.findViewById(R.id.playButton);
 
                 videoView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {

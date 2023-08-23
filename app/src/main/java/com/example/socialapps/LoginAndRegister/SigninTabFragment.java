@@ -105,6 +105,10 @@ public class SigninTabFragment extends Fragment {
                         }
                     });
                 }
+                {
+                    Toast.makeText(getContext(),"Format Wrong",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
         //===================================Above Email login Code=====================================
