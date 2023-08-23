@@ -1,14 +1,21 @@
 package com.example.socialapps.StartupPage;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.socialapps.LoginAndRegister.LoginRegisterActivity;
@@ -17,6 +24,7 @@ import com.example.socialapps.R;
 
 public class NavigationActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_REQUEST_CODE = 1;
     ViewPager slideViewPager;
     LinearLayout dotIndicator;
     Button backButton, nextButton, skipButton;
@@ -60,6 +68,11 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        // 檢查權限並請求
+        if (!arePermissionsGranted()) {
+            requestPermissions();
+        }
 
         //進入onCreate時會檢查sharedPreferences，如果isMainPageSet true的話，直接進入MainActivity
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -132,6 +145,32 @@ public class NavigationActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
+    }
+
+    // 處理權限請求的結果
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (arePermissionsGranted()) {
+                // 已獲得權限
+                Toast.makeText(this, "權限已獲取", Toast.LENGTH_SHORT).show();
+            } else {
+                // 拒絕了權限
+                Toast.makeText(this, "未獲取權限，某些功能可能無法使用", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.INTERNET, Manifest.permission.READ_EXTERNAL_STORAGE},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    private boolean arePermissionsGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     //顯示dot的func

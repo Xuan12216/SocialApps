@@ -5,16 +5,17 @@ import java.util.ArrayList;
 public class Post {
     private String text;
     private ArrayList<String> images;
-    private String video;
+    private ArrayList<String> video;
     private String userId;
     private String userProPic;
     private String userName;
 
-    public Post(String postText, ArrayList<String> postImages, String profilePic, String userName) {
+    public Post(String postText, ArrayList<String> postImages, String profilePic, String userName, ArrayList<String> postVideos) {
         this.text = postText;
         this.images = postImages;
         this.userProPic = profilePic;
         this.userName = userName;
+        this.video = postVideos;
     }
 
     // Getters and setters
@@ -34,11 +35,11 @@ public class Post {
         this.images = images;
     }
 
-    public String getVideo() {
+    public ArrayList<String> getVideo() {
         return video;
     }
 
-    public void setVideo(String video) {
+    public void setVideo(ArrayList<String> video) {
         this.video = video;
     }
 

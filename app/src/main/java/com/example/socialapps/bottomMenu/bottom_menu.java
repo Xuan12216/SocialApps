@@ -56,7 +56,7 @@ public class bottom_menu extends AppCompatActivity {
     private static final int PICK_VIDEOS_REQUEST = 3;
     private List<Uri> selectedImageUris = new ArrayList<>();
     private List<Uri> selectedVideoUris = new ArrayList<>();
-    private Executor executor = Executors.newFixedThreadPool(4);
+    private Executor executor = Executors.newFixedThreadPool(3);
     LinearLayout imageContainer ;
     private String errorMessage,errorMessage1;
 

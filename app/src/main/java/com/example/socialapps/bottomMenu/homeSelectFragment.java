@@ -25,11 +25,6 @@ import java.util.ArrayList;
 public class homeSelectFragment extends Fragment {
     private DatabaseReference databaseReference;
     homeSelectAdapter adapter;
-    ArrayList<String> text = new ArrayList<>();
-    ArrayList<String> image = new ArrayList<>();
-    ArrayList<String> video = new ArrayList<>();
-    ArrayList<String> userProPic = new ArrayList<>();
-    ArrayList<String> userNameList = new ArrayList<>();
     RecyclerView recyclerView;
     ArrayList<Post> posts = new ArrayList<>();
     @Override
@@ -66,6 +61,13 @@ public class homeSelectFragment extends Fragment {
                         postImages.add(imageUrl != null ? imageUrl : "");
                     }
 
+                    // 讀取 videos 資料
+                    ArrayList<String> postVideos = new ArrayList<>();
+                    for (DataSnapshot videoSnapshot : postSnapshot.child("videos").getChildren()) {
+                        String videoUrl = videoSnapshot.getValue(String.class);
+                        postVideos.add(videoUrl != null ? videoUrl : "");
+                    }
+
                     // 讀取 users 資料
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(postUserID);
                     userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -75,7 +77,7 @@ public class homeSelectFragment extends Fragment {
                             String userName = userSnapshot.child("userName").getValue(String.class);
 
                             // 創建新的 Post 對象並添加到 posts ArrayList
-                            Post post = new Post(postText, postImages, profilePic, userName);
+                            Post post = new Post(postText, postImages, profilePic, userName, postVideos);
                             posts.add(post);
                             adapter.notifyDataSetChanged();
                         }

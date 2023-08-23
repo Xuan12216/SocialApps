@@ -49,6 +49,8 @@ public class HomeFragment extends Fragment {
         adapter = new ViewPagerAdapterHome(fragmentManager, getLifecycle());
         home_viewPager2.setAdapter(adapter);
 
+        // 關閉滑動切換頁面功能
+        home_viewPager2.setUserInputEnabled(false);
         //處理tabLayout的點擊事件
         home_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
